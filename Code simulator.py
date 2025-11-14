@@ -159,10 +159,10 @@ if __name__ == "__main__":
     # --- Initialize Controllers ---
     # Tuned gains (These are placeholders, you must tune them!)
     # (Kp, Ki, Kd)
-    pid_z = PIDController(30.0, 15.0, 10.0)
-    pid_roll = PIDController(4.0, 1.5, 2.5)
-    pid_pitch = PIDController(4.0, 1.5, 2.5) # Same as roll
-    pid_yaw = PIDController(2.0, 0.5, 1.0)
+    pid_z = PIDController(0, 0, 0)
+    pid_roll = PIDController(1.0, 0, 0)
+    pid_pitch = PIDController(0, 0, 0) # Same as roll
+    pid_yaw = PIDController(0, 0, 0)
     
     # --- Control Allocation Matrix (Inverse) ---
     # T_m = M_inv @ u_v
