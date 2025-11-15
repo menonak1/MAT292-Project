@@ -159,11 +159,13 @@ if __name__ == "__main__":
     # --- Initialize Controllers ---
     # Tuned gains (These are placeholders, you must tune them!)
     # (Kp, Ki, Kd)
-    pid_z = PIDController(0, 0, 0)
-    pid_roll = PIDController(1.0, 0, 0)   # <-- This is the one you will test. Start the hunt from Kp=1.0
-    pid_pitch = PIDController(10, 25, 0.5) # <-- GENTLE "HOLD" CONTROLLER (Prevents the crash)
-    pid_yaw = PIDController(1.0, 20, 0.5)   # <-- GENTLE "HOLD" CONTROLLER (Prevents drift)
-    
+    # --- Initialize Controllers ---
+    # Our settings to find the Ultimate Gain (Ku) for the ROLL axis
+    pid_z = PIDController(Kp=0.0, Ki=0.0, Kd=0.0)      # OFF
+    pid_roll = PIDController(Kp=5, Ki=3.5, Kd=0.567)   # This is the one we will increase
+    pid_pitch = PIDController(Kp=5, Ki=4, Kd=0.8)  # GENTLE "HOLD"
+    pid_yaw = PIDController(Kp=3.0, Ki=0.1, Kd=0.0)    # GENTLE "HOLD"
+
     # --- Control Allocation Matrix (Inverse) ---
     # T_m = M_inv @ u_v
     M_inv = np.array([
@@ -193,7 +195,7 @@ if __name__ == "__main__":
         yaw_desired = 0.0
         
         # Simple step disturbance for attitude
-        if 2.0 < t_start < 6.0:
+        if 2.0 < t_start < 8.0:
             roll_desired = np.deg2rad(10.0)
         
         # --- 2. Calculate Errors ---
@@ -287,7 +289,7 @@ if __name__ == "__main__":
     plt.plot(t_values, np.rad2deg(x_values[3, :]), label='$\phi$ (Roll)')
     plt.plot(t_values, np.rad2deg(x_values[4, :]), label='$\\theta$ (Pitch)')
     plt.plot(t_values, np.rad2deg(x_values[5, :]), label='$\psi$ (Yaw)')
-    plt.axhline(y=10.0, xmin=0.2, xmax=0.6, color='r', linestyle=':', label='Roll disturbance')
+    plt.axhline(y=10.0, xmin=0.2, xmax=0.8, color='r', linestyle=':', label='Roll disturbance')
     plt.title('Attitude')
     plt.xlabel('Time (s)')
     plt.ylabel('Angle (degrees)')
