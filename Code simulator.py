@@ -138,7 +138,7 @@ if __name__ == "__main__":
     
     # --- Simulation Setup ---
     dt = 0.01             # Control loop time step (s) -> 100 Hz
-    total_time = 10.0     # Total simulation time (s)
+    total_time = 15.0     # Total simulation time (s)
     num_steps = int(total_time / dt)
     
     # Initial state vector [x, y, z, phi, theta, psi, x_dot, y_dot, z_dot, p, q, r]
@@ -161,10 +161,10 @@ if __name__ == "__main__":
     # (Kp, Ki, Kd)
     # --- Initialize Controllers ---
     # Our settings to find the Ultimate Gain (Ku) for the ROLL axis
-    pid_z = PIDController(Kp=0.0, Ki=0.000, Kd=0.0)      # OFF
-    pid_roll = PIDController(Kp=0.08, Ki=0.001, Kd=0.043)   # This is the one we will increase
-    pid_pitch = PIDController(Kp=0, Ki=0, Kd=0)  # GENTLE "HOLD"
-    pid_yaw = PIDController(Kp=0, Ki=0.0, Kd=0.0)    # GENTLE "HOLD"
+    pid_z = PIDController(Kp=3, Ki=0, Kd=2.28)      # OFF
+    pid_roll = PIDController(Kp=0.08, Ki=0.000, Kd=0.043)   # This is the one we will increase
+    pid_pitch = PIDController(Kp=0.08, Ki=0.000, Kd=0.043)  # GENTLE "HOLD"
+    pid_yaw = PIDController(Kp=0.1, Ki=0.0, Kd=0.057)    # GENTLE "HOLD"
 
     # --- Control Allocation Matrix (Inverse) ---
     # T_m = M_inv @ u_v
@@ -196,7 +196,9 @@ if __name__ == "__main__":
         
         # Simple step disturbance for attitude
         if 2.0 < t_start < 8.0:
-            roll_desired = np.deg2rad(10.0)
+            yaw_desired = np.deg2rad(30.0)
+            roll_desired = np.deg2rad(20.0)
+            pitch_desired = np.deg2rad(10.0)
         
         # --- 2. Calculate Errors ---
         # Note: We control z-position, but attitude angles.
@@ -275,8 +277,8 @@ if __name__ == "__main__":
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
     plt.plot(t_values, x_values[2, :], label='z (Altitude)')
-    plt.plot(t_values, x_values[0, :], label='x', linestyle='--')
-    plt.plot(t_values, x_values[1, :], label='y', linestyle='--')
+    #plt.plot(t_values, x_values[0, :], label='x', linestyle='--')
+    #plt.plot(t_values, x_values[1, :], label='y', linestyle='--')
     plt.axhline(y=1.0, color='r', linestyle=':', label='z desired')
     plt.title('Position')
     plt.xlabel('Time (s)')
@@ -289,7 +291,8 @@ if __name__ == "__main__":
     plt.plot(t_values, np.rad2deg(x_values[3, :]), label='$\phi$ (Roll)')
     plt.plot(t_values, np.rad2deg(x_values[4, :]), label='$\\theta$ (Pitch)')
     plt.plot(t_values, np.rad2deg(x_values[5, :]), label='$\psi$ (Yaw)')
-    plt.axhline(y=10.0, xmin=0.2, xmax=0.8, color='r', linestyle=':', label='Roll disturbance')
+    plt.axhline(y=10.0, xmin=0.133, xmax=0.66667, color='r', linestyle=':', label='Roll disturbance')
+    plt.axhline(y=30.0, xmin=0.133, xmax=0.66667, color='g', linestyle=':', label='Yaw disturbance')
     plt.title('Attitude')
     plt.xlabel('Time (s)')
     plt.ylabel('Angle (degrees)')
