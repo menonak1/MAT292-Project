@@ -64,11 +64,11 @@ def quadcopter_dynamics(t, x, m, g, I, L, k_m, T1, T2, T3, T4):
     F_thrust_B = np.array([0, 0, T_total])
     
     # Torques in Body frame (based on '+' configuration)
-    tau_phi = L * (T2 - T3)
-    tau_theta = L * (T1 - T4)
-    tau_psi = k_m * (T1 - T2 + T3 - T4)
+    tau_phi   = L * (-T1 + T3)               # roll
+    tau_theta = L * (-T2 + T4)               # pitch
+    tau_psi   = k_m * (-T1 + T2 - T3 + T4)   # yaw
     tau_B = np.array([tau_phi, tau_theta, tau_psi])
-    
+        
     # --- 3. Precompute Trig Functions ---
     c_phi = np.cos(phi)
     s_phi = np.sin(phi)
@@ -144,8 +144,8 @@ if __name__ == "__main__":
     # Initial state vector [x, y, z, phi, theta, psi, x_dot, y_dot, z_dot, p, q, r]
     # Start on the ground, slightly tilted
     x_initial = np.zeros(12)
-    x_initial[3] = np.deg2rad(1.0) # 1 degree roll
-    x_initial[4] = np.deg2rad(-1.0) # -1 degree pitch
+    x_initial[3] = np.deg2rad(0.0) # 1 degree roll
+    x_initial[4] = np.deg2rad(0.0) # -1 degree pitch
 
     # Store results
     t_values = np.zeros(num_steps)
@@ -161,18 +161,18 @@ if __name__ == "__main__":
     # (Kp, Ki, Kd)
     # --- Initialize Controllers ---
     # Our settings to find the Ultimate Gain (Ku) for the ROLL axis
-    pid_z = PIDController(Kp=0.0, Ki=0.0, Kd=0.0)      # OFF
-    pid_roll = PIDController(Kp=5, Ki=3.5, Kd=0.567)   # This is the one we will increase
-    pid_pitch = PIDController(Kp=5, Ki=4, Kd=0.8)  # GENTLE "HOLD"
-    pid_yaw = PIDController(Kp=3.0, Ki=0.1, Kd=0.0)    # GENTLE "HOLD"
+    pid_z = PIDController(Kp=0.0, Ki=0.000, Kd=0.0)      # OFF
+    pid_roll = PIDController(Kp=0.08, Ki=0.001, Kd=0.043)   # This is the one we will increase
+    pid_pitch = PIDController(Kp=0, Ki=0, Kd=0)  # GENTLE "HOLD"
+    pid_yaw = PIDController(Kp=0, Ki=0.0, Kd=0.0)    # GENTLE "HOLD"
 
     # --- Control Allocation Matrix (Inverse) ---
     # T_m = M_inv @ u_v
     M_inv = np.array([
-        [0.25, 0, 0.5/L, 0.25/k_m],
-        [0.25, 0.5/L, 0, -0.25/k_m],
-        [0.25, -0.5/L, 0, 0.25/k_m],
-        [0.25, 0, -0.5/L, -0.25/k_m]
+        [0.25,        -1.0/(2.0*L),  0.0,           -1.0/(4.0*k_m)],
+        [0.25,         0.0,          -1.0/(2.0*L),   1.0/(4.0*k_m)],
+        [0.25,         1.0/(2.0*L),  0.0,           -1.0/(4.0*k_m)],
+        [0.25,         0.0,          1.0/(2.0*L),    1.0/(4.0*k_m)],
     ])
     
     # Max/Min motor thrust (for saturation)

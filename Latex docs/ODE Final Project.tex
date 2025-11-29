@@ -162,7 +162,7 @@ one controller for altitude ($z$) and three for attitude ($\phi, \theta, \psi$).
 The four PID outputs, known as virtual controls, $\mathbf{u}_v = [T, \tau_\phi, \tau_\theta, \tau_\psi]^T$,
 must be mapped to the four individual motor thrusts $\mathbf{T}_m = [T_1, T_2, T_3, T_4]^T$.
 Based on the quadcopter configuration in our proposal (a '+' configuration) and
-assuming motor 1 is rear, 4 is front, 2 is right, and 3 is left:
+assuming motor 1 is rear, 3 is front, 2 is right, and 4 is left:
 \begin{align*}
 T &= T_1 + T_2 + T_3 + T_4 \\
 \tau_\phi &= L(T_2 - T_3) \quad \text{(Roll torque)} \\
