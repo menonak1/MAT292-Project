@@ -161,7 +161,7 @@ if __name__ == "__main__":
     # (Kp, Ki, Kd)
     # --- Initialize Controllers ---
     # Our settings to find the Ultimate Gain (Ku) for the ROLL axis
-    pid_z = PIDController(Kp=3, Ki=0, Kd=2.28)      # OFF
+    pid_z = PIDController(Kp=3, Ki=0, Kd=2.28)      # Attitude PD
     pid_roll = PIDController(Kp=0.08, Ki=0.000, Kd=0.043)   # This is the one we will increase
     pid_pitch = PIDController(Kp=0.08, Ki=0.000, Kd=0.043)  # GENTLE "HOLD"
     pid_yaw = PIDController(Kp=0.1, Ki=0.0, Kd=0.057)    # GENTLE "HOLD"
@@ -197,7 +197,7 @@ if __name__ == "__main__":
         # Simple step disturbance for attitude
         if 2.0 < t_start < 8.0:
             yaw_desired = np.deg2rad(30.0)
-            roll_desired = np.deg2rad(20.0)
+            roll_desired = np.deg2rad(10.0)
             pitch_desired = np.deg2rad(10.0)
         
         # --- 2. Calculate Errors ---
