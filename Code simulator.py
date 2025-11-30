@@ -326,8 +326,6 @@ if __name__ == "__main__":
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
     plt.plot(t_values, x_values[2, :], label='z (Altitude)')
-    plt.plot(t_values, x_values[0, :], label='x', linestyle='--')
-    plt.plot(t_values, x_values[1, :], label='y', linestyle='--')
     plt.axhline(y=1.0, color='r', linestyle=':', label='z desired')
     plt.title('Position')
     plt.xlabel('Time (s)')
