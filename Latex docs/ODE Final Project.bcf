@@ -2373,6 +2373,17 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">references.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="1" intorder="1">mahony2012multirotor</bcf:citekey>
+    <bcf:citekey order="1" intorder="2">hoffmann2007quads</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">greenwood2003classical</bcf:citekey>
+    <bcf:citekey order="2" intorder="2">mahony2012multirotor</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">astrom1995pid</bcf:citekey>
+    <bcf:citekey order="3" intorder="2">ogata2010modern</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">virtanen2020scipy</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">ascher1998computer</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">ziegler1942optimum</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">ogata2010modern</bcf:citekey>
+    <bcf:citekey order="7" intorder="2">ascher1998computer</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">
