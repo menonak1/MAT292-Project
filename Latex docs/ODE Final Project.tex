@@ -8,7 +8,7 @@
 \usepackage[margin=1in]{geometry} % 1-inch margins
 \usepackage{amsmath} % For math equations
 \usepackage{amssymb} % For \mathbb symbols
-\usepackage[draft]{graphicx} % For inserting figures (remove [draft] once plots are saved)
+\usepackage{graphicx} % For inserting figures (remove [draft] once plots are saved)
 \usepackage{hyperref} % For clickable links
 \usepackage{booktabs} % For nice tables (in results)
 \usepackage{indentfirst} % indent paragraphs
@@ -43,12 +43,6 @@ and short settling times, and maintain altitude with negligible steady-state err
 results illustrate how ODE modeling and numerical integration directly enable the analysis and
 design of feedback controllers for real engineering systems.
 \end{abstract}
-
-\vspace*{9cm}
-
-\tableofcontents 
-
-\vspace*{7cm}
 
 % --- 2. INTRODUCTION ---
 \section{Introduction}
@@ -277,7 +271,7 @@ The simulation commanded the quadcopter to maintain a hover at $z=1.0\text{m}$.
 The Altitude controller performance is shown in Figure \ref{fig:altitude}.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\textwidth]{quadcopter_position.png}
+\includegraphics[width=0.8\textwidth]{Position.png}
 \caption{Altitude (z-axis) response to a 1.0m step command. The PID controller brings the quadcopter to the desired altitude in approximately 3 seconds with zero overshoot.}
 \label{fig:altitude}
 \end{figure}
@@ -287,8 +281,8 @@ The Altitude controller performance is shown in Figure \ref{fig:altitude}.
 The controller's ability to track commands and stabilize against disturbances was tested by commanding a 10-degree Roll and a 30-degree Yaw from $t=2\text{s}$ to $t=8\text{s}$. The attitude controller performance is shown in Figure \ref{fig:attitude}.
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.8\textwidth]{quadcopter_attitude.png}
-\caption{Attitude (roll, pitch, yaw) response to simultaneous step commands (Roll=10$^{\circ}$, Yaw=30$^{\circ}$). The PD controller achieves fast rise time with minimal overshoot, and the Pitch axis remains stable at $0^{\circ}$, demonstrating excellent cross-coupling rejection.}
+\includegraphics[width=0.8\textwidth]{Attitude.png}
+\caption{Attitude (roll, pitch, yaw) response to simultaneous step commands (Roll=10$^{\circ}$, Yaw=30$^{\circ}$). The PD controller achieves fast rise time with minimal overshoot, and the Pitch axis remains stable at $0^{\circ}$, demonstrating excellent \textbf{cross-coupling rejection.}}
 \label{fig:attitude}
 \end{figure}
 
@@ -363,12 +357,45 @@ practical control systems~\cite{ogata2010modern,ascher1998computer}.
 \section{Simulation Code}
 The final Python code used for the simulation and data generation is provided below.
 \begin{verbatim}
+"""Quadcopter attitude/altitude simulator.
+
+How to run
+~~~~~~~~~~
+1. Install dependencies once: ``pip install numpy scipy matplotlib``.
+2. Execute ``python Code\\ simulator.py`` from this folder.  Two plots
+     will appear when the run finishes (position/attitude and motor thrusts).
+
+How to experiment
+~~~~~~~~~~~~~~~~~
+- Tune the PID gains in the "Initialize Controllers" section: start with
+    only Kp, then add Kd for damping, finally Ki for steady-state trim.
+- Modify the step disturbance (currently a 10° roll request from 2–8 s)
+    or replace it with your own trajectory generator.
+- Adjust physical parameters (mass, arm length, inertia tensor, etc.) to
+    match the vehicle you want to emulate.
+
+Testing ideas
+~~~~~~~~~~~~~
+- Add assertions/prints inside the loop (e.g., ensure motor thrusts stay
+    within [T_min, T_max]).
+- Compare different gain sets by running the file multiple times and
+    inspecting the plots or exporting ``x_values``/``motor_thrusts``.
+"""
+
 import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 
 class PIDController:
-    """A simple PID controller class."""
+    """Minimal PID helper used by each axis controller.
+
+    Parameters
+    ----------
+    Kp, Ki, Kd : float
+        Proportional / integral / derivative gains.  Tuning tip:
+        raise Kp until you see crisp response, use Kd to damp oscillations,
+        then add a small Ki only if you need zero steady-state error.
+    """
     def __init__(self, Kp, Ki, Kd):
         self.Kp = Kp
         self.Ki = Ki
@@ -400,25 +427,43 @@ class PIDController:
         self.previous_error = 0.0
 
 def quadcopter_dynamics(t, x, m, g, I, L, k_m, T1, T2, T3, T4):
-    """
-    Defines the 12-state quadcopter dynamics function based on Newton-Euler equations.
+    """Continuous-time rigid-body model passed to ``solve_ivp``.
+
+    Parameters
+    ----------
+    t : float
+        Current integration time (unused, but required by ``solve_ivp``).
+    x : ndarray shape (12,)
+        State vector ``[x, y, z, phi, theta, psi, x_dot, y_dot, z_dot, p, q, r]``.
+    m, g, I, L, k_m : floats/array
+        Physical constants: mass, gravity, inertia matrix, arm length, motor torque coeff.
+    T1..T4 : float
+        Individual motor thrusts (already saturated and non-negative).
+
+    Returns
+    -------
+    dot_x : ndarray shape (12,)
+        Time derivative of the state used by the numerical integrator.
     """
     
     # --- 1. Unpack State Vector ---
-    angles = x[3:6]
-    vel = x[6:9]
-    rates = x[9:12]
+    pos = x[0:3]       # [x, y, z]
+    angles = x[3:6]    # [phi, theta, psi]
+    vel = x[6:9]       # [x_dot, y_dot, z_dot]
+    rates = x[9:12]    # [p, q, r]
     
     phi, theta, psi = angles
+    p, q, r = rates
     
     # --- 2. Calculate Forces and Torques ---
+    # Total thrust in Body frame
     T_total = T1 + T2 + T3 + T4
     F_thrust_B = np.array([0, 0, T_total])
     
-    # Torques in Body frame (based on final invertible M_inv)
-    tau_phi   = L * (-T1 + T3)
-    tau_theta = L * (-T2 + T4)
-    tau_psi   = k_m * (-T1 + T2 - T3 + T4)
+    # Torques in Body frame (based on '+' configuration)
+    tau_phi   = L * (-T1 + T3)               # roll
+    tau_theta = L * (-T2 + T4)               # pitch
+    tau_psi   = k_m * (-T1 + T2 - T3 + T4)   # yaw
     tau_B = np.array([tau_phi, tau_theta, tau_psi])
         
     # --- 3. Precompute Trig Functions ---
@@ -432,10 +477,11 @@ def quadcopter_dynamics(t, x, m, g, I, L, k_m, T1, T2, T3, T4):
     # --- 4. Calculate State Derivatives ---
     dot_x = np.zeros(12)
     
-    # 1. Translational Position Rate:
+    # $\dot{p} = v$ (Derivative of position is velocity)
     dot_x[0:3] = vel
     
-    # 2. Angular Angle Rate:
+    # $\dot{\eta} = W \omega$ (Derivative of Euler angles)
+    # Transformation matrix W
     W = np.array([
         [1, s_phi * np.tan(theta), c_phi * np.tan(theta)],
         [0, c_phi, -s_phi],
@@ -443,20 +489,35 @@ def quadcopter_dynamics(t, x, m, g, I, L, k_m, T1, T2, T3, T4):
     ])
     dot_x[3:6] = W @ rates
     
-    # 3. Translational Acceleration:
+    # $\dot{v} = \ddot{p}$ (Derivative of velocity is acceleration)
+    # Rotation matrix R (Body to Inertial)
+        # State and actuator histories.  Having these arrays makes it easy to
+        # compute custom metrics (settling time, overshoot, RMS error) after the
+        # run by simply operating on the columns you care about.
     R = np.array([
         [c_psi * c_theta, c_psi * s_theta * s_phi - s_psi * c_phi, c_psi * s_theta * c_phi + s_psi * s_phi],
         [s_psi * c_theta, s_psi * s_theta * s_phi + c_psi * c_phi, s_psi * s_theta * c_phi - c_psi * s_phi],
         [-s_theta, c_theta * s_phi, c_theta * c_phi]
     ])
+    
+    # Gravity vector in Inertial frame
     F_grav_I = np.array([0, 0, -m * g])
+    
+    # Thrust in Inertial frame
     F_thrust_I = R @ F_thrust_B
+    
+    # Net force in Inertial frame
     F_net_I = F_grav_I + F_thrust_I
+    
+    # Translational acceleration
     dot_x[6:9] = F_net_I / m
     
-    # 4. Angular Acceleration:
+    # $\dot{\omega} = \ddot{\eta}$ (Derivative of angular rates)
+    # Newton-Euler equations
     I_inv = np.linalg.inv(I)
+    # Gyroscopic terms (omega_B x (I @ omega_B))
     gyro_terms = np.cross(rates, I @ rates)
+    
     dot_x[9:12] = I_inv @ (tau_B - gyro_terms)
     
     return dot_x
@@ -465,37 +526,54 @@ def quadcopter_dynamics(t, x, m, g, I, L, k_m, T1, T2, T3, T4):
 if __name__ == "__main__":
 
     # --- Physical Constants ---
-    g = 9.81
-    m = 0.5
-    L = 0.225
-    k_m = 0.01
+    # Feel free to swap in your vehicle numbers here.  Keeping these in
+    # one place makes it easy to create "what-if" scenarios (heavier mass,
+    # longer arms, different inertia tensor, etc.).
+    g = 9.81      # Gravitational acceleration (m/s^2)
+    m = 0.5       # Mass of quadcopter (kg)
+    L = 0.225     # Arm length (m)
+    k_m = 0.01    # Yaw torque coefficient (N*m / N)
+    # Inertia tensor (assuming a symmetrical frame)
     I_xx = 0.005
     I_yy = 0.005
     I_zz = 0.01
     I = np.diag([I_xx, I_yy, I_zz])
     
     # --- Simulation Setup ---
-    dt = 0.01
-    total_time = 15.0
+    # ``dt`` controls controller rate; lowering it increases fidelity but
+    # also simulation time.  ``total_time`` lets you test longer missions.
+    dt = 0.01             # Control loop time step (s) -> 100 Hz
+    total_time = 15.0     # Total simulation time (s)
     num_steps = int(total_time / dt)
     
+    # Initial state vector [x, y, z, phi, theta, psi, x_dot, y_dot, z_dot, p, q, r]
+    # Start on the ground, slightly tilted
     x_initial = np.zeros(12)
+    x_initial[3] = np.deg2rad(0.0) # 1 degree roll
+    x_initial[4] = np.deg2rad(0.0) # -1 degree pitch
+
+    # Store results
     t_values = np.zeros(num_steps)
+    # State history makes it easy to compute settling time/overshoot metrics
+    # or export data to CSV for offline analysis.
     x_values = np.zeros((12, num_steps))
     t_values[0] = 0.0
     x_values[:, 0] = x_initial
+    
+    # Store motor thrusts for plotting/logging
     motor_thrusts = np.zeros((4, num_steps))
     
-    # --- Initialize Controllers (FINAL TUNED VALUES) ---
-    # Altitude Controller (PID)
-    pid_z = PIDController(Kp=0.17, Ki=0.21, Kd=1.0)      
-    
-    # Attitude Controllers (PD/P, Symmetry used)
-    pid_roll = PIDController(Kp=0.08, Ki=0.001, Kd=0.043)   
-    pid_pitch = PIDController(Kp=0.08, Ki=0.000, Kd=0.043)  
-    pid_yaw = PIDController(Kp=0.8, Ki=0.000, Kd=0.16)    
+    # --- Initialize Controllers ---
+    # Each axis gets its own PID.  Start with just Kp (Ki=Kd=0), then bring
+    # in Kd for damping, finally Ki for steady-state trim.  The numbers below
+    # are simply baseline values—swap in your own when experimenting.
+    pid_z = PIDController(Kp=3, Ki=0, Kd=2.28)          # Altitude loop
+    pid_roll = PIDController(Kp=0.08, Ki=0.00, Kd=0.043)  # Primary tuning axis
+    pid_pitch = PIDController(Kp=0.08, Ki=0.0, Kd=0.043)   # Gentle hold
+    pid_yaw = PIDController(Kp=0.1, Ki=0.0, Kd=0.057)       # Yaw hold
 
     # --- Control Allocation Matrix (Inverse) ---
+    # T_m = M_inv @ u_v
     M_inv = np.array([
         [0.25,        -1.0/(2.0*L),  0.0,           -1.0/(4.0*k_m)],
         [0.25,         0.0,          -1.0/(2.0*L),   1.0/(4.0*k_m)],
@@ -503,7 +581,8 @@ if __name__ == "__main__":
         [0.25,         0.0,          1.0/(2.0*L),    1.0/(4.0*k_m)],
     ])
     
-    T_max = (m * g) * 2.0
+    # Max/Min motor thrust (for saturation)
+    T_max = (m * g) / 2.0 # Max thrust per motor (e.g., 2x gravity)
     T_min = 0.0
     
     print("Starting simulation...")
@@ -515,22 +594,48 @@ if __name__ == "__main__":
         x_current = x_values[:, i-1]
         
         # --- 1. Define Setpoints (Desired State) ---
+        # Swap this section for your maneuver generator.  Steps, ramps,
+        # chirps, or data-driven trajectories all go here.
         z_desired = 1.0
         roll_desired = 0.0
         pitch_desired = 0.0
         yaw_desired = 0.0
         
-        # Commands: Roll 10 degrees & Yaw 30 degrees (t=2s to t=8s)
+        # Simple step disturbance for attitude.  Use this block to mimic
+        # wind gusts or pilot stick inputs by forcing temporary setpoint jumps.
         if 2.0 < t_start < 8.0:
             roll_desired = np.deg2rad(10.0)
             yaw_desired = np.deg2rad(30.0)
+            pitch_desired = np.deg2rad(10.0)
         
-        # --- 2. Calculate Errors & Control Output ---
-        error_z = z_desired - x_current[2]       
-        error_roll = roll_desired - x_current[3]   
-        error_pitch = pitch_desired - x_current[4] 
-        error_yaw = yaw_desired - x_current[5]   
+        # --- 2. Calculate Errors ---
+        # Note: We control z-position, but attitude angles.
+        # For a full controller, you'd control x,y position which would
+        # generate desired roll/pitch, but for this project this is simpler.
         
+        error_z = z_desired - x_current[2]       # z
+        error_roll = roll_desired - x_current[3]   # phi
+        error_pitch = pitch_desired - x_current[4] # theta
+        error_yaw = yaw_desired - x_current[5]   # psi
+        
+        # PID controllers also need to dampen rates (D-term)
+        # A better way is a "PD" controller on angle and a "P" on rate.
+        # For simplicity, we'll use the PID as-is, but use angle *error*
+        # and also pass in the *negative of the current rate* to the D-term
+        # This is a common trick called "derivative on measurement"
+        #
+        # Here we'll stick to the textbook PID:
+        # We need to compute the derivative of the error.
+        # de/dt = (error - prev_error) / dt
+        # For angles: d(phi_d - phi)/dt = -d(phi)/dt = -p (if phi_d is constant)
+        # Let's modify the PID update to accept current_rate for the D-term
+        
+        # A standard PID's D-term is Kd * (error - prev_error) / dt
+        # A PID with "Derivative on Measurement" is:
+        # u(t) = Kp*e(t) + Ki*integral(e(t)) - Kd * (y(t) - y(t-1))/dt
+        # For angles, this is approx: -Kd * (rate)
+        
+        # Let's just use the simple PID from the class for now.
         u_z = pid_z.update(error_z, dt)
         u_phi = pid_roll.update(error_roll, dt)
         u_theta = pid_pitch.update(error_pitch, dt)
@@ -538,27 +643,33 @@ if __name__ == "__main__":
 
         # --- 3. Control Allocation ---
         
-        # Gravity compensation feed-forward
+        # Add gravity compensation (feed-forward)
+        # We must divide by (c_phi * c_theta) to account for tilt
         c_phi, c_theta = np.cos(x_current[3]), np.cos(x_current[4])
-        T_hover = (m * g) / (c_phi * c_theta + 1e-6) 
+        T_hover = (m * g) / (c_phi * c_theta + 1e-6) # Add epsilon to avoid division by zero
         
+        # Total thrust = hover thrust + altitude correction
         T = T_hover + u_z
+        
+        # Combine into virtual command vector [T, tau_phi, tau_theta, tau_psi]
         u_virtual = np.array([T, u_phi, u_theta, u_psi])
-
+        
+        # Calculate actual motor thrusts
         T_motors = M_inv @ u_virtual
-
+        
         # Saturate motors
         T_motors_sat = np.clip(T_motors, T_min, T_max)
         T1, T2, T3, T4 = T_motors_sat
         motor_thrusts[:, i] = T_motors_sat
         
         # --- 4. Dynamics Step ---
+        # Pass motor thrusts and constants as *constant arguments* for this step
         sol = solve_ivp(
             quadcopter_dynamics, 
             [t_start, t_end], 
             x_current,
             method='RK45',
-            t_eval=[t_end], 
+            t_eval=[t_end], # Only get the final point
             args=(m, g, I, L, k_m, T1, T2, T3, T4)
         )
         
@@ -583,15 +694,10 @@ if __name__ == "__main__":
     
     # Plot Attitude (Roll, Pitch, Yaw)
     plt.subplot(1, 2, 2)
-    plt.plot(t_values, np.rad2deg(x_values[3, :]), label='$\phi$ (Roll)')
-    plt.plot(t_values, np.rad2deg(x_values[4, :]), label='$\\theta$ (Pitch)')
-    plt.plot(t_values, np.rad2deg(x_values[5, :]), label='$\psi$ (Yaw)')
-    
-    # Plot Roll and Yaw desired targets
-    # Scale xmin/xmax relative to total_time=15.0
-    plt.axhline(y=10.0, xmin=2.0/15.0, xmax=8.0/15.0, color='r', linestyle=':', label='Roll command')
-    plt.axhline(y=30.0, xmin=2.0/15.0, xmax=8.0/15.0, color='g', linestyle=':', label='Yaw command')
-    
+    plt.plot(t_values, np.rad2deg(x_values[3, :]), label=r'$\phi$ (Roll)')
+    plt.plot(t_values, np.rad2deg(x_values[4, :]), label=r'$\theta$ (Pitch)')
+    plt.plot(t_values, np.rad2deg(x_values[5, :]), label=r'$\psi$ (Yaw)')
+    plt.axhline(y=10.0, xmin=0.2, xmax=0.8, color='r', linestyle=':', label='Roll disturbance')
     plt.title('Attitude')
     plt.xlabel('Time (s)')
     plt.ylabel('Angle (degrees)')

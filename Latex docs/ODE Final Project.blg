@@ -1,15 +1,15 @@
 [0] Config.pm:308> INFO - This is Biber 2.20
 [0] Config.pm:311> INFO - Logfile is 'ODE Final Project.blg'
-[55] biber-darwin:340> INFO - === Sun Nov 30, 2025, 02:51:08
-[67] Biber.pm:420> INFO - Reading 'ODE Final Project.bcf'
-[128] Biber.pm:994> INFO - Found 8 citekeys in bib section 0
-[140] Biber.pm:4463> INFO - Processing section 0
-[149] Biber.pm:4654> INFO - Looking for bibtex file 'references.bib' for section 0
-[151] bibtex.pm:1713> INFO - LaTeX decoding ...
-[157] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
-[214] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[214] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[214] Biber.pm:4283> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
-[215] Biber.pm:4289> INFO - No sort tailoring available for locale 'en-US'
-[218] bbl.pm:676> INFO - Writing 'ODE Final Project.bbl' with encoding 'UTF-8'
-[221] bbl.pm:779> INFO - Output to ODE Final Project.bbl
+[29] biber-darwin:340> INFO - === Tue Dec  2, 2025, 17:16:00
+[35] Biber.pm:420> INFO - Reading 'ODE Final Project.bcf'
+[66] Biber.pm:994> INFO - Found 8 citekeys in bib section 0
+[73] Biber.pm:4463> INFO - Processing section 0
+[77] Biber.pm:4654> INFO - Looking for bibtex file 'references.bib' for section 0
+[78] bibtex.pm:1713> INFO - LaTeX decoding ...
+[81] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[111] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[112] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[112] Biber.pm:4283> INFO - Sorting list 'none/global//global/global/global' of type 'entry' with template 'none' and locale 'en-US'
+[112] Biber.pm:4289> INFO - No sort tailoring available for locale 'en-US'
+[114] bbl.pm:676> INFO - Writing 'ODE Final Project.bbl' with encoding 'UTF-8'
+[116] bbl.pm:779> INFO - Output to ODE Final Project.bbl

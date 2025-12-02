@@ -1,0 +1,298 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{mahony2012multirotor}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=523f1624940e07366b63a96872ddb4be}{%
+           family={Mahony},
+           familyi={M\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=3c2a6a0658f1ad90e7d4a83eef9c3841}{%
+           family={Kumar},
+           familyi={K\bibinitperiod},
+           given={Vijay},
+           giveni={V\bibinitperiod}}}%
+        {{hash=c0e503339314930d140b67b5e7c55c3e}{%
+           family={Corke},
+           familyi={C\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{5fc15c0964834184114b646ecf061c77}
+      \strng{fullhash}{c72b6af88df31e595e84c356067cc6a4}
+      \strng{fullhashraw}{c72b6af88df31e595e84c356067cc6a4}
+      \strng{bibnamehash}{c72b6af88df31e595e84c356067cc6a4}
+      \strng{authorbibnamehash}{c72b6af88df31e595e84c356067cc6a4}
+      \strng{authornamehash}{5fc15c0964834184114b646ecf061c77}
+      \strng{authorfullhash}{c72b6af88df31e595e84c356067cc6a4}
+      \strng{authorfullhashraw}{c72b6af88df31e595e84c356067cc6a4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Robotics and Automation Magazine}
+      \field{number}{3}
+      \field{title}{Multirotor Aerial Vehicles: Modeling, Estimation, and Control of Quadrotor Robots}
+      \field{volume}{19}
+      \field{year}{2012}
+      \field{pages}{20\bibrangedash 32}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1109/MRA.2012.2206474
+      \endverb
+    \endentry
+    \entry{hoffmann2007quads}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=42cd168a5ee1c17955cbb257f1bfb80f}{%
+           family={Hoffmann},
+           familyi={H\bibinitperiod},
+           given={Gabriel\bibnamedelima M.},
+           giveni={G\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=95166507329264c53a1b0cd04717decf}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Haomiao},
+           giveni={H\bibinitperiod}}}%
+        {{hash=bf736ef77afc05309d1648f0576078a5}{%
+           family={Waslander},
+           familyi={W\bibinitperiod},
+           given={Steven\bibnamedelima L.},
+           giveni={S\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=0bff5d84791cef5170102750c46bfec9}{%
+           family={Tomlin},
+           familyi={T\bibinitperiod},
+           given={Claire\bibnamedelima J.},
+           giveni={C\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {AIAA}%
+      }
+      \strng{namehash}{ebcd4b774bbc666b5112aa6b37efac2a}
+      \strng{fullhash}{13c95ae2d289a61a8e5c626bc1124d1a}
+      \strng{fullhashraw}{13c95ae2d289a61a8e5c626bc1124d1a}
+      \strng{bibnamehash}{13c95ae2d289a61a8e5c626bc1124d1a}
+      \strng{authorbibnamehash}{13c95ae2d289a61a8e5c626bc1124d1a}
+      \strng{authornamehash}{ebcd4b774bbc666b5112aa6b37efac2a}
+      \strng{authorfullhash}{13c95ae2d289a61a8e5c626bc1124d1a}
+      \strng{authorfullhashraw}{13c95ae2d289a61a8e5c626bc1124d1a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{AIAA Guidance, Navigation and Control Conference}
+      \field{title}{Quadrotor Helicopter Flight Dynamics and Control: Theory and Experiment}
+      \field{year}{2007}
+    \endentry
+    \entry{greenwood2003classical}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=add4c3e1dbea31342b4c7b9da620b9d1}{%
+           family={Greenwood},
+           familyi={G\bibinitperiod},
+           given={Donald\bibnamedelima T.},
+           giveni={D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Dover Publications}%
+      }
+      \strng{namehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{fullhash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{fullhashraw}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{bibnamehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{authorbibnamehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{authornamehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{authorfullhash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{authorfullhashraw}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Classical Dynamics}
+      \field{year}{2003}
+    \endentry
+    \entry{astrom1995pid}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=c3d20aeae7b78c916b54dfa5dff23164}{%
+           family={Åstr{"o}m},
+           familyi={Å\bibinitperiod},
+           given={Karl\bibnamedelima J.},
+           giveni={K\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=8173ddf3e86efb110477401bcb9336de}{%
+           family={H{"a}gglund},
+           familyi={H\bibinitperiod},
+           given={Tore},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Instrument Society of America}%
+      }
+      \strng{namehash}{c8b23148f71fa4eab895753fa362ea7a}
+      \strng{fullhash}{c8b23148f71fa4eab895753fa362ea7a}
+      \strng{fullhashraw}{c8b23148f71fa4eab895753fa362ea7a}
+      \strng{bibnamehash}{c8b23148f71fa4eab895753fa362ea7a}
+      \strng{authorbibnamehash}{c8b23148f71fa4eab895753fa362ea7a}
+      \strng{authornamehash}{c8b23148f71fa4eab895753fa362ea7a}
+      \strng{authorfullhash}{c8b23148f71fa4eab895753fa362ea7a}
+      \strng{authorfullhashraw}{c8b23148f71fa4eab895753fa362ea7a}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{PID Controllers: Theory, Design, and Tuning}
+      \field{year}{1995}
+    \endentry
+    \entry{ogata2010modern}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=72cb1e667ce543119df1b777c0db24de}{%
+           family={Ogata},
+           familyi={O\bibinitperiod},
+           given={Katsuhiko},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{fullhash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{fullhashraw}{72cb1e667ce543119df1b777c0db24de}
+      \strng{bibnamehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{authorbibnamehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{authornamehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{authorfullhash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{authorfullhashraw}{72cb1e667ce543119df1b777c0db24de}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{5}
+      \field{title}{Modern Control Engineering}
+      \field{year}{2010}
+    \endentry
+    \entry{virtanen2020scipy}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{3}{}{%
+        {{hash=18703a2bb6a62484483c193a212da2f8}{%
+           family={Virtanen},
+           familyi={V\bibinitperiod},
+           given={Pauli},
+           giveni={P\bibinitperiod}}}%
+        {{hash=646fbfe08374cc41c2f9bd971d8c4725}{%
+           family={Gommers},
+           familyi={G\bibinitperiod},
+           given={Ralf},
+           giveni={R\bibinitperiod}}}%
+        {{hash=d500f4849030f34359cdb3e1513acf83}{%
+           family={Oliphant},
+           familyi={O\bibinitperiod},
+           given={Travis\bibnamedelima E.},
+           giveni={T\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{f252038edd7f112d75da3bf0c1edecbc}
+      \strng{fullhash}{2614ea043823efadef6a201c96446be0}
+      \strng{fullhashraw}{2614ea043823efadef6a201c96446be0}
+      \strng{bibnamehash}{2614ea043823efadef6a201c96446be0}
+      \strng{authorbibnamehash}{2614ea043823efadef6a201c96446be0}
+      \strng{authornamehash}{f252038edd7f112d75da3bf0c1edecbc}
+      \strng{authorfullhash}{2614ea043823efadef6a201c96446be0}
+      \strng{authorfullhashraw}{2614ea043823efadef6a201c96446be0}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Nature Methods}
+      \field{title}{{SciPy} 1.0: Fundamental Algorithms for Scientific Computing in {Python}}
+      \field{volume}{17}
+      \field{year}{2020}
+      \field{pages}{261\bibrangedash 272}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1038/s41592-019-0686-2
+      \endverb
+    \endentry
+    \entry{ascher1998computer}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=77cd505720b6810a72ebb7d3f84bfa30}{%
+           family={Ascher},
+           familyi={A\bibinitperiod},
+           given={Uri\bibnamedelima M.},
+           giveni={U\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=f08c98d15f33a47a2a502c1da8062eef}{%
+           family={Petzold},
+           familyi={P\bibinitperiod},
+           given={Linda\bibnamedelima R.},
+           giveni={L\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {SIAM}%
+      }
+      \strng{namehash}{c0bc433284cedd68ba2f4904e903994a}
+      \strng{fullhash}{c0bc433284cedd68ba2f4904e903994a}
+      \strng{fullhashraw}{c0bc433284cedd68ba2f4904e903994a}
+      \strng{bibnamehash}{c0bc433284cedd68ba2f4904e903994a}
+      \strng{authorbibnamehash}{c0bc433284cedd68ba2f4904e903994a}
+      \strng{authornamehash}{c0bc433284cedd68ba2f4904e903994a}
+      \strng{authorfullhash}{c0bc433284cedd68ba2f4904e903994a}
+      \strng{authorfullhashraw}{c0bc433284cedd68ba2f4904e903994a}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Computer Methods for Ordinary Differential Equations and Differential-Algebraic Equations}
+      \field{year}{1998}
+    \endentry
+    \entry{ziegler1942optimum}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=cf238d2b9d2c93a20357e23767089925}{%
+           family={Ziegler},
+           familyi={Z\bibinitperiod},
+           given={John\bibnamedelima G.},
+           giveni={J\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=05777d60947dbcd14d97168d6549fd76}{%
+           family={Nichols},
+           familyi={N\bibinitperiod},
+           given={Nathaniel\bibnamedelima B.},
+           giveni={N\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \strng{namehash}{e3a528118896bcef0311cd70287c11d0}
+      \strng{fullhash}{e3a528118896bcef0311cd70287c11d0}
+      \strng{fullhashraw}{e3a528118896bcef0311cd70287c11d0}
+      \strng{bibnamehash}{e3a528118896bcef0311cd70287c11d0}
+      \strng{authorbibnamehash}{e3a528118896bcef0311cd70287c11d0}
+      \strng{authornamehash}{e3a528118896bcef0311cd70287c11d0}
+      \strng{authorfullhash}{e3a528118896bcef0311cd70287c11d0}
+      \strng{authorfullhashraw}{e3a528118896bcef0311cd70287c11d0}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Transactions of the ASME}
+      \field{number}{8}
+      \field{title}{Optimum Settings for Automatic Controllers}
+      \field{volume}{64}
+      \field{year}{1942}
+      \field{pages}{759\bibrangedash 768}
+      \range{pages}{10}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
