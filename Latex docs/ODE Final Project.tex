@@ -11,6 +11,7 @@
 \usepackage[draft]{graphicx} % For inserting figures (remove [draft] once plots are saved)
 \usepackage{hyperref} % For clickable links
 \usepackage{booktabs} % For nice tables (in results)
+\usepackage{indentfirst} % indent paragraphs
 \usepackage[
 backend=biber,
 style=ieee, % A common engineering style for citations
@@ -47,7 +48,7 @@ design of feedback controllers for real engineering systems.
 \section{Introduction}
 
 \subsection{Motivation}
-A quadcopter is an unmanned aerial vehicle (UAV) whose flight is controlled by
+A quadcopter \setlength{\parindent}{24pt} is an unmanned aerial vehicle (UAV) whose flight is controlled by
 four motors. This UAV's navigational agility has made it popular
 in fields from photography to logistics. However, quadcopters are
 inherently unstable. Without a constant stream of adjustments
@@ -56,6 +57,7 @@ The system's dynamics are also highly non-linear and coupled, making it a
 very fitting problem for an ODE course.
 
 \subsection{Project Goal}
+
 The primary objective of this project was to model the unstable flight dynamics
 of a quadcopter as a system of coupled, non-linear ordinary differential equations,
 and to use this model to design and tune a stabilizing feedback controller.
@@ -70,10 +72,12 @@ underlying ODEs without the added complexity of full 3D trajectory tracking.
 
 % --- 3. MATHEMATICAL MODEL ---
 \section{Mathematical Model and Theoretical Foundation}
+
 The quadcopter's motion is modeled as a rigid body in 3D space, using a
 fixed inertial frame (Earth, $E$) and a rotating body frame (Body, $B$) attached to the vehicle~\cite{mahony2012multirotor,hoffmann2007quads}.
 
 \subsection{State Vector}
+
 The system is described by a 12-element state vector $\mathbf{x} \in \mathbb{R}^{12}$:
 $$
 \mathbf{x} = [
@@ -88,6 +92,7 @@ while rotational motion is tracked in the body frame $B$. This requires
 transformation matrices to couple the dynamics.
 
 \subsection{Translational Dynamics}
+
 In the inertial frame, Newton's 2nd Law governs translational motion:
 $$
 \mathbf{F}_{\text{net}, E} = m \ddot{\mathbf{p}}_E = m \begin{bmatrix} \ddot{x} \\ \ddot{y} \\ \ddot{z} \end{bmatrix}
@@ -118,6 +123,7 @@ The first six ODEs are thus: $\dot{x} = \dot{x}$, $\dot{y} = \dot{y}$, $\dot{z} 
 and the three translational acceleration equations above ($\ddot{x}, \ddot{y}, \ddot{z}$).
 
 \subsection{Rotational Dynamics}
+
 Rotational motion is described by the Newton--Euler equations in the body frame~\cite{greenwood2003classical,mahony2012multirotor}:
 $$
 \mathbf{\tau}_{B} = I \dot{\mathbf{\omega}}_B + \mathbf{\omega}_B \times (I \mathbf{\omega}_B)
@@ -153,23 +159,25 @@ which can be written in the form $\dot{\mathbf{x}} = f(t, \mathbf{x}, \mathbf{u}
 \section{Methodology}
 
 \subsection{Overall Control Architecture}
+
 The controller is organized in two layers. An \textbf{inner attitude loop} uses three
 PD controllers to track desired Euler angles $(\phi_d, \theta_d, \psi_d)$ by
 commanding body-frame torques $(\tau_\phi, \tau_\theta, \tau_\psi)$. An
-    extbf{altitude loop} uses a PID controller to track the desired height $z_d$ by
+\textbf{altitude loop} uses a PID controller to track the desired height $z_d$ by
 commanding the total thrust $T$. Together, these four controllers produce the
 virtual control vector
 \[
     \mathbf{u}_v = [T, \tau_\phi, \tau_\theta, \tau_\psi]^T,
 \]
 which is then mapped to the individual motor thrusts via the inverse mixing
-matrix $M^{-1}$ described below. In the simulations we choose simple step
+matrix $M^{-1}$ described below. In the simulations we chose simple step
 commands (for example, $z_d = 1.0\,\text{m}$ and attitude steps
 of $\phi_d = 10^\circ$, $\psi_d = 30^\circ$ over a finite time window), while
 holding $\theta_d = 0^\circ$ to test cross-coupling.
 
 \subsection{Control Strategy: PID Controller}
-To stabilize the unstable dynamics, we implement four independent controllers
+
+To stabilize the dynamics, we implemented four independent controllers
 following the standard PID control law~\cite{astrom1995pid,ogata2010modern}, which computes a corrective action
 \[
 u(t) = K_p e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d \frac{de(t)}{dt}.
@@ -177,11 +185,12 @@ u(t) = K_p e(t) + K_i \int_0^t e(\tau)\,d\tau + K_d \frac{de(t)}{dt}.
 The proportional term $K_p e(t)$ responds to the current error, the integral
 term accumulates past error to eliminate steady-state drift, and the derivative
 term anticipates future error to damp oscillations. For the fast attitude axes
-$(\phi, \theta, \psi)$ we ultimately set $K_i \approx 0$ and use a PD
-structure, while the altitude controller retains a nonzero $K_i$ to remove
+$(\phi, \theta, \psi)$ we ultimately set $K_i \approx 0$ and used a PD
+structure, while the altitude controller retained a nonzero $K_i$ to remove
 steady-state error against gravity.
 
 \subsection{Control Allocation}
+
 The four PID outputs, known as virtual controls, $\mathbf{u}_v = [T, \tau_\phi, \tau_\theta, \tau_\psi]^T$,
 must be mapped to the four individual motor thrusts $\mathbf{T}_m = [T_1, T_2, T_3, T_4]^T$.
 Based on the quadcopter configuration and the final invertible mixing matrix used:
@@ -191,7 +200,7 @@ T &= T_1 + T_2 + T_3 + T_4 \\
 \tau_\theta &= L(-T_2 + T_4) \quad \text{(Pitch torque)} \\
 \tau_\psi &= k_m(-T_1 + T_2 - T_3 + T_4) \quad \text{(Yaw torque)}
 \end{align*}
-This requires the inverse mapping $\mathbf{T}_m = M^{-1} \mathbf{u}_v$, where $M^{-1}$ is:
+This required the inverse mapping $\mathbf{T}_m = M^{-1} \mathbf{u}_v$, where $M^{-1}$ is:
 $$
 M^{-1} =
 \begin{bmatrix}
@@ -203,13 +212,14 @@ M^{-1} =
 $$
 
 \subsection{Numerical Simulation}
+
 The simulation was implemented in Python using the
-    exttt{scipy.integrate.solve\_ivp} function~\cite{virtanen2020scipy}, which employs a Runge--Kutta 45
-method to solve the 12 ODEs~\cite{ascher1998computer}. We use a main loop that calls
-    exttt{solve\_ivp} at each discrete control step with sampling period
+    \texttt{scipy.integrate.solve\_ivp} function~\cite{virtanen2020scipy}, which employs a Runge--Kutta 45
+method to solve the 12 ODEs~\cite{ascher1998computer}. We used a main loop that calls
+    \texttt{solve\_ivp} at each discrete control step with sampling period
 $\Delta t = 0.01\,\text{s}$. At each step $k$, the controller computes the
 motor thrusts from the current state $\mathbf{x}(t_k)$, and
-	exttt{solve\_ivp} integrates the ODEs from $t_k$ to $t_{k+1} = t_k +
+	\texttt{solve\_ivp} integrates the ODEs from $t_k$ to $t_{k+1} = t_k +
 \Delta t$ using these thrusts as constant inputs. This mimics a digital flight
 controller running at $100$\,Hz interacting with continuous-time vehicle
 dynamics. The initial condition is a vehicle at rest near the origin, which
@@ -219,6 +229,7 @@ highlights the need for active stabilization.
 \section{Results}
 
 \subsection{PID Tuning}
+
 The goal of tuning was to achieve a near \emph{critically damped} response for
 all four axes: fast tracking with minimal overshoot or oscillation.
 
@@ -255,6 +266,7 @@ Yaw ($\psi$) & $0.80$ & $0.000$ & $0.16$ \\ \bottomrule
 \end{table}
 
 \subsection{Hover Stabilization}
+
 The simulation commanded the quadcopter to maintain a hover at $z=1.0\text{m}$.
 The Altitude controller performance is shown in Figure \ref{fig:altitude}.
 \begin{figure}[h!]
@@ -265,6 +277,7 @@ The Altitude controller performance is shown in Figure \ref{fig:altitude}.
 \end{figure}
 
 \subsection{Attitude Disturbance Rejection}
+
 The controller's ability to track commands and stabilize against disturbances was tested by commanding a 10-degree Roll and a 30-degree Yaw from $t=2\text{s}$ to $t=8\text{s}$. The attitude controller performance is shown in Figure \ref{fig:attitude}.
 \begin{figure}[h!]
 \centering
@@ -276,10 +289,12 @@ The controller's ability to track commands and stabilize against disturbances wa
 
 % --- 6. DISCUSSION ---
 \section{Discussion}
+
 The primary objective of stabilizing the quadcopter using an ODE-based model
 and feedback control was successfully met.
 
 \subsection{Interpretation of Results}
+
 As shown in Figure~\ref{fig:altitude}, the altitude controller (PID) achieves
 near-perfect tracking of the $z = 1.0\,\text{m}$ setpoint with no visible
 overshoot and a short settling time. The integral term $K_i$ successfully
@@ -297,6 +312,7 @@ time-domain behavior observed in simulation is consistent with the design
 goal of a nearly critically damped response.
 
 \subsection{Limitations and Future Work}
+
 The model currently has several simplifying assumptions:
 \begin{itemize}
     \item \textbf{No aerodynamic drag:} We assume drag on the body is
@@ -320,6 +336,7 @@ controllers that preserve stability and performance.
 
 % --- 7. CONCLUSION ---
 \section{Conclusion}
+
 We derived a 12-DOF non-linear ODE system governing quadcopter dynamics and
 implemented a stabilizing PD/PID control architecture solved numerically with
 Runge--Kutta methods (\texttt{scipy.integrate.solve\_ivp}). The simulations
