@@ -67,7 +67,18 @@ clear, practical demonstration of how the tools of an ODE course---modeling,
 linear algebra, and numerical solvers---are used to solve a fundamental problem
 in modern robotics. In this work we restrict attention to hover and small-angle
 attitude maneuvers, which allows us to focus on deriving and simulating the
-underlying ODEs without the added complexity of full 3D trajectory tracking.
+underlying ODEs without the added complexity of full 3D trajectory tracking. Hover 
+is treated as an equilibrium point of the nonlinear system, and the goal of the 
+feedback controller is to locally stabilize this equilibrium in the presence of 
+small disturbances. 
+The central takeaway of this project is that modeling the quadcopter using the  
+nonlinear equations of motion highlights coupling effects and behaviors 
+that are not captured by simplified or linearized models about hover. In 
+particular, the nonlinear model provides clearer insight into how attitude and 
+altitude dynamics interact during disturbance rejection and controller response.
+Controller performance is evaluated quantitatively in simulation using standard 
+time-domain metrics such as rise time, settling time, and overshoot.
+
 
 
 % --- 3. MATHEMATICAL MODEL ---
@@ -343,8 +354,8 @@ Runge--Kutta methods (\texttt{scipy.integrate.solve\_ivp}). The simulations
 show that the inherently unstable open-loop system can be stabilized, with
 step responses that exhibit small overshoot and short settling times in both
 altitude and attitude. This project demonstrates how the core ideas from an
-ODE course---formulating physical laws as differential equations and solving
-them numerically---translate directly into the analysis and design of
+ODE course, formulating physical laws as differential equations and solving
+them numerically, translate directly into the analysis and design of
 practical control systems~\cite{ogata2010modern,ascher1998computer}.
 
 
