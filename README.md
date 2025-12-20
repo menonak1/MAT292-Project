@@ -1,9 +1,9 @@
-# Quadcopter Attitude/Altitude Simulation
+# Quadcopter Attitude Simulation
 
 Python simulation of a quadcopter using a 12-state Newton–Euler model with PD/PID control. The main script `Code simulator.py` runs a hover and step-attitude test, logging state histories and plotting altitude/attitude and motor thrusts.
 
 ## Requirements
-- Python 3.9+ (tested on macOS)
+- Python 3.9+
 - Packages: `numpy`, `scipy`, `matplotlib`
 
 Install once:
@@ -11,12 +11,12 @@ Install once:
 pip install numpy scipy matplotlib
 ```
 
-## Run the simulation
+## To run the simulation
 From the project root:
 ```bash
 python "Code simulator.py"
 ```
-This will print progress and open two figures:
+Results in 2 plots being generated
 - Position subplot (z only) with desired altitude reference
 - Attitude subplot (roll, pitch, yaw) and motor thrusts
 
@@ -32,14 +32,9 @@ This will print progress and open two figures:
 - Adjust `dt` and `total_time` to trade fidelity vs. run time
 
 ## LaTeX report
-The write-up lives in `Latex docs/ODE Final Project.tex` with references in `Latex docs/references.bib`. Build with `pdflatex` + `biber` if you want the PDF.
+The write-up lives in `ODE Final Project.tex` with references in `references.bib`.
 
 ## Folder layout
 - `Code simulator.py` — main simulation script
-- `class PIDController.py` — (legacy) PID class
+- `class PIDController.py` — PID class
 - `Latex docs/` — report and bibliography
-- `.vscode/` — editor settings
-
-## Notes
-- If plots don’t show, ensure you run the full script (not a single word) in a terminal.
-- If images are missing in the LaTeX PDF, remove the `[draft]` option from `graphicx` and verify the figure filenames match.
